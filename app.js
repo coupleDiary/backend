@@ -1,41 +1,30 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+// get express
+const express = require("express");
+const app = express();
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// call .env file
+require("dotenv").config();
 
-var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(logger('dev'));
+// use body parser to use post
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// Static File Service
+app.use(express.static("public"));
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+// API Module
+// require("./routes/index")(app);
+// require("./routes/engine")(app);
+// require("./routes/dialogflow")(app);
+
+// start API
+var server = app.listen(process.env.API_PORT, function() {
+    console.log("-----------API INFORMATION-----------\n");
+    console.log("host : " + process.env.API_HOST);
+    console.log("port : " + process.env.API_PORT);
+    console.log(
+        "\nYou can change The Api info in the /.env file,\nIf this info is wrong.\n"
+    );
+    console.log("---------------------------------------");
+    console.log("start API ....\n");
 });
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;

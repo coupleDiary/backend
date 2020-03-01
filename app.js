@@ -13,6 +13,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // API Module
+require("./routes/journey")(app);
 // require("./routes/index")(app);
 // require("./routes/engine")(app);
 // require("./routes/dialogflow")(app);
